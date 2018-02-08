@@ -359,6 +359,7 @@ CaptHelp(void) {
     "  --js-can-access-clipboard=<on|off> Script clipboard privs (default: unknown)\n"
 #if QT_VERSION >= 0x040500
     "  --print-backgrounds=<on|off>   Backgrounds in PDF/PS output (default: off)  \n"
+    "  --no-background=<on|off>       Transparent background (default: off)        \n"
     "  --zoom-factor=<float>          Page zoom factor (default: no zooming)       \n"
     "  --zoom-text-only=<on|off>      Whether to zoom only the text (default: off) \n"
     "  --http-proxy=<url>             Address for HTTP proxy server (default: none)\n"
@@ -538,6 +539,13 @@ main(int argc, char *argv[]) {
 
     } else if (strncmp("--links-included-in-focus-chain", s, nlen) == 0) {
       page.setAttribute(QWebSettings::LinksIncludedInFocusChain, value);
+
+	} else if (strncmp("--no-background", s, nlen) == 0) {
+      if (strcmp("on", value) == 0) {
+        QPalette palette = page.palette();
+        palette.setBrush(QPalette::Base, Qt::transparent);
+        page.setPalette(palette);
+      }
 
 #if QT_VERSION >= 0x040500
     } else if (strncmp("--print-backgrounds", s, nlen) == 0) {
